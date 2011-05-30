@@ -27,12 +27,7 @@ dropMessages = (name) ->
   cache[name].history = []
   postname.deliver 'dropMessage.' + name
 
-postman =
+this.postman =
   deliver: deliver
   receive: receive
   dropMessages: dropMessages
-
-postman.deliver 'foo', 'bar'
-
-postman.receive 'foo', (x) ->
-	alert x
