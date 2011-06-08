@@ -28,10 +28,9 @@ task 'cleanup', 'cleans up the libs before a release', ->
 	clean()
 	
 task 'build', 'builds the postman', ->
-	console.log 'building postman from coffeescript'
-	files = fs.readdirSync 'src'
-	files = ('src/' + file for file in files when file.match(/\.coffee$/))  
-	run ['-c', '-o', 'lib'].concat(files)
+    console.log 'building postman from coffeescript'
+    code = fs.readFileSync 'src/postman.coffee', 'utf8'
+    fs.writeFile 'lib/postman.js', CoffeeScript.compile code
 	
 task 'minify', 'minifies postman to a release build', ->
 	console.log 'minifying postman'
@@ -40,6 +39,6 @@ task 'minify', 'minifies postman to a release build', ->
 	(fs.readFile file, 'utf8', (err, data) -> makeUgly err, data, file) for file in files
 	
 task 'release', 'creates a release of postman', ->
-	invoke 'cleanup'
-	invoke 'build'
-	invoke 'minify'
+    invoke 'cleanup'
+    invoke 'build'
+    invoke 'minify'
