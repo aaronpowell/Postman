@@ -1,7 +1,6 @@
 fs = require 'fs'
 path = require 'path'
 CoffeeScript = require 'coffee-script'
-{spawn, exec} = require 'child_process'
 uglify = require "uglify-js"
 jsp = uglify.parser
 pro = uglify.uglify
@@ -10,12 +9,6 @@ pro = uglify.uglify
 clean = ->
 	files = fs.readdirSync 'lib'
 	(fs.unlinkSync 'lib/' + file) for file in files
-
-# Run a CoffeeScript through our node/coffee interpreter.
-run = (args) ->  
-	proc =         spawn 'coffee', args  
-	proc.stderr.on 'data', (buffer) -> console.log buffer.toString()  
-	proc.on        'exit', (status) -> process.exit(1) if status != 0
 	
 makeUgly = (err, str, file) ->
 	ast = jsp.parse str
