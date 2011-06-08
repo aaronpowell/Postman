@@ -39,7 +39,7 @@ task 'minify', 'minifies postman to a release build', ->
 	files = ('lib/' + file for file in files when file.match(/\.js$/))
 	(fs.readFile file, 'utf8', (err, data) -> makeUgly err, data, file) for file in files
 	
-#task 'release', 'creates a release of postman', ->
-#	clean()
-#	exec 'cake build'
-#	exec 'cake minify'
+task 'release', 'creates a release of postman', ->
+	invoke 'cleanup'
+	invoke 'build'
+	invoke 'minify'
