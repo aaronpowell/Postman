@@ -27,7 +27,10 @@ deliver = (name, args) ->
 receive = (name, fn, ignoreHistory) ->
   createCache name if ! cache[name]
   cache[name].subs.push fn
-  fn.apply this, arg.args for arg in cache[name].history if !ignoreHistory
+  if !ignoreHistory
+    for arg in cache[name].history
+      fn.apply this, arg.args
+      arg.lastPublished = new Date()
   postman
 
 dropMessages = (name, criteria) ->
@@ -45,7 +48,7 @@ dropByFunction = (fn, msgs) ->
   
 dropByDate = (date, msgs) ->
     msgs.reduce (x) ->
-        x.lastPublished < date
+        x.created < date
   
 this.postman =
   deliver: deliver
