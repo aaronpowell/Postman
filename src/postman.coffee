@@ -24,10 +24,10 @@ deliver = (name, args) ->
   fn.apply this, args.args for fn in cache[name].subs
   postman
 
-receive = (name, fn) ->
+receive = (name, fn, ignoreHistory) ->
   createCache name if ! cache[name]
   cache[name].subs.push fn
-  fn.apply this, arg.args for arg in cache[name].history
+  fn.apply this, arg.args for arg in cache[name].history if !ignoreHistory
   postman
 
 dropMessages = (name, criteria) ->
