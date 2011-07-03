@@ -27,3 +27,15 @@ test('deliver complex message and ye shall receive', function() {
     postman.receive('test6', function(x) { ok(x.foo === 'bar'); });
     postman.deliver('test6', { foo: 'bar' });
 });
+
+test('receive can ignore previous messages', function() {
+  var notCalled = true;
+  
+  postman.deliver('test7');
+  
+  postman.receive('test7', function() {
+    notCalled = false;
+  }, true);
+  
+  ok(notCalled);
+});
