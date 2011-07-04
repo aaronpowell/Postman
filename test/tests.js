@@ -39,3 +39,16 @@ test('receive can ignore previous messages', function() {
   
   ok(notCalled);
 });
+
+test('can retract a callback and not receive messages', function() {
+  var fn = function() {
+    ok(false);
+  };
+  postman.receive('test8', fn);
+  
+  postman.retract('test8', fn);
+  
+  postman.deliver('test8');
+  
+  ok(true);
+});

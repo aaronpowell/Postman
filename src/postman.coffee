@@ -33,6 +33,16 @@ receive = (name, fn, ignoreHistory) ->
       arg.lastPublished = new Date()
   postman
 
+retract = (name, fn) ->
+  createCache name if !cache[name]
+  if !fn
+    cache[name].subs = []
+  else
+    subs = cache[name].subs
+    index = subs.indexOf fn
+    if index > -1
+      subs.splice(0, index).concat subs.splice index, subs.length
+  
 dropMessages = (name, criteria) ->
   createCache name if ! cache[name]
   if criteria
@@ -54,3 +64,4 @@ this.postman =
   deliver: deliver
   receive: receive
   dropMessages: dropMessages
+  retract: retract

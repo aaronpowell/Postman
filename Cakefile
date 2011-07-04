@@ -44,4 +44,8 @@ task 'watch', 'Watch prod source files and build changes', ->
     fs.watchFile "#{source}/#{file}.coffee", (curr, prev) ->
         if +curr.mtime isnt +prev.mtime
             console.log "Saw change in #{source}/#{file}.coffee"
-            invoke 'build'
+            try
+              invoke 'build'
+              console.log 'build complete'
+            catch e
+              console.log e
