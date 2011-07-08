@@ -1,4 +1,4 @@
-![Postman](https://github.com/aaronpowell/postman/raw/master/assets/logo.png)
+![Postman](https://github.com/aaronpowell/Postman/raw/master/assets/Logo.png)
 
 ## What is it?
 
