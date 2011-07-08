@@ -1,2 +1,1 @@
-postman = require './postman.js'
-exports = postman.postman
+`module.exports = require('./postman.js').postman;`
