@@ -24,14 +24,16 @@ task 'cleanup', 'cleans up the libs before a release', ->
 	
 task 'build', "builds #{file}", ->
     console.log "building #{file} from coffeescript"
-    code = fs.readFileSync "#{source}/#{file}.coffee", 'utf8'
-    fs.writeFile "#{output}/#{file}.js", CoffeeScript.compile code
+    for f in fs.readdirSync source
+      fn = f.split('.')[0]
+      code = fs.readFileSync "#{source}/#{fn}.coffee", 'utf8'
+      fs.writeFile "#{output}/#{fn}.js", CoffeeScript.compile code
 	
 task 'minify', "minifies #{file} to a release build", ->
 	console.log "minifying #{file}"
 	files = fs.readdirSync 'lib'
-	files = ("#{output}/" + file for file in files when file.match(/\.js$/))
-	(fs.readFile file, 'utf8', (err, data) -> makeUgly err, data, file) for file in files
+	files = ("#{output}/" + f for f in files when f.match(/\.js$/))
+	(fs.readFile f, 'utf8', (err, data) -> makeUgly err, data, f) for f in files
 	
 task 'release', 'creates a release of #{file}', ->
     invoke 'cleanup'

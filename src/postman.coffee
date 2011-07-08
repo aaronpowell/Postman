@@ -1,5 +1,5 @@
 cache = {}
-
+postie
 isArray = (obj) ->
 	obj.constructor == Array
 isFunction = (obj) ->
@@ -22,7 +22,7 @@ deliver = (name, args) ->
     args: args
   cache[name].history.push args
   fn.apply this, args.args for fn in cache[name].subs
-  postman
+  postie
 
 receive = (name, fn, ignoreHistory) ->
   createCache name if ! cache[name]
@@ -31,7 +31,7 @@ receive = (name, fn, ignoreHistory) ->
     for arg in cache[name].history
       fn.apply this, arg.args
       arg.lastPublished = new Date()
-  postman
+  postie
 
 retract = (name, fn) ->
   createCache name if !cache[name]
@@ -42,6 +42,7 @@ retract = (name, fn) ->
     index = subs.indexOf fn
     if index > -1
       subs.splice(0, index).concat subs.splice index, subs.length
+  postie
   
 dropMessages = (name, criteria) ->
   createCache name if ! cache[name]
@@ -51,7 +52,7 @@ dropMessages = (name, criteria) ->
   else
     cache[name].history = []
 	
-  postname.deliver 'dropMessage.' + name
+  postie.deliver 'dropMessage.' + name
   
 dropByFunction = (fn, msgs) ->
   msgs.reduce fn
@@ -60,8 +61,10 @@ dropByDate = (date, msgs) ->
     msgs.reduce (x) ->
         x.created < date
   
-this.postman =
+postie =
   deliver: deliver
   receive: receive
   dropMessages: dropMessages
   retract: retract
+  
+this.postman = postie
