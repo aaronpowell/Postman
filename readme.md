@@ -82,3 +82,6 @@ THE SOFTWARE.
 
 
   [1]: http://coffeescript.org
+  [2]: https://github.com/aaronpowell/Postman/raw/master/lib/postman.js
+  [3]: https://github.com/aaronpowell/Postman/raw/master/lib/postman.min.js
+  [4]: http://npmjs.org
