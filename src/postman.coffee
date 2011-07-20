@@ -55,10 +55,10 @@ dropMessages = (name, criteria) ->
   postie.deliver 'dropMessage.' + name
   
 dropByFunction = (fn, msgs) ->
-  msgs.reduce fn
+  msgs.filter fn
   
 dropByDate = (date, msgs) ->
-    msgs.reduce (x) ->
+    msgs.filter (x) ->
         x.created < date
   
 postie =
