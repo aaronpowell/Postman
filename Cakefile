@@ -35,10 +35,30 @@ task 'minify', "minifies #{file} to a release build", ->
 	files = ("#{output}/" + f for f in files when f.match(/\.js$/))
 	(fs.readFile f, 'utf8', (err, data) -> makeUgly err, data, f) for f in files
 	
-task 'release', 'creates a release of #{file}', ->
+task 'release', "creates a release of #{file}", ->
     invoke 'cleanup'
     invoke 'build'
+    invoke 'tests'
     invoke 'minify'
+    
+task 'tests', "run tests for #{file}", ->
+    console.log 'Time for some tests!'
+    runner = require 'qunit'
+    sys = require 'sys'
+    colors = require 'colors'
+    test = 
+      code: "./#{output}/#{file}.js",
+      tests: "./test/tests.js"
+
+    runner.options.summary = false
+      
+    report = (r) ->
+      if r.errors
+        sys.puts 'Uh oh there were errors'.bold.red
+      else
+        sys.puts 'All test pass'.green
+      
+    runner.run test, report
 
 task 'watch', 'Watch prod source files and build changes', ->
     console.log "Watching for changes in #{source}"
@@ -49,5 +69,6 @@ task 'watch', 'Watch prod source files and build changes', ->
             try
               invoke 'build'
               console.log 'build complete'
+              invoke 'tests'
             catch e
               console.log e
