@@ -1,20 +1,34 @@
 {
   "name": "postman",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The Postman will help deliver messages around your application",
-  "keywords": ["pub/sub", "eventing", "message-bus"],
-  "author" : "Aaron Powell http://apowell.me",
-  "contributers" : [
+  "keywords": [
+    "pub/sub",
+    "eventing",
+    "message-bus"
+  ],
+  "author": "Aaron Powell http://apowell.me",
+  "contributers": [
     "Aaron Powell http://apowell.me"
   ],
-  "licenses": [{"type": "MIT"}],
-  "repositories": [{
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ],
+  "repositories": [
+    {
       "type": "git",
-      "url": "git://github.com/aaronpowell/Postman.git" 
-  }],
-  "engines": ["node"],
-  "main" : "./lib/index.js",
-  "directories" : {
-    "lib" : "./lib"
-  }
+      "url": "git://github.com/aaronpowell/Postman.git"
+    }
+  ],
+  "engines": [
+    "node"
+  ],
+  "main": "./lib/index.js",
+  "directories": {
+    "lib": "./lib"
+  },
+  "dependencies": {},
+  "devDependencies": {}
 }
