@@ -1,42 +1,37 @@
 class LinkedList
   constructor: () ->
-    first = null
-    last = null
-    
-    @first = () ->
-      first
-    @last = () ->
-      last
+    @first = null
+    @last = null
     @length = 0
     
-    @append = (data) ->
-      return if !data
-      
-      node = 
-        data: data
-        next: null
-        prev: null
-      
-      if !first
-        first = node
-        last = node
-      else
-        last.next = node
-        node.prev = last
-        last = node
-      
-      @length++
+  append: (data) ->
+    return if !data
+    
+    node = 
+      data: data
+      next: null
+      prev: null
+    
+    if !@first
+      @first = node
+      @last = node
+    else
+      @last.next = node
+      node.prev = last
+      @last = node
+    
+    @length++
 
-    @remove = (node) ->
-      return if !node
-      
-      if !node.prev
-        first = node.next
-        if first
-          first.prev = null
-      else
-        node.prev.next = node.next
-      @length--
+  remove: (node) ->
+    return if !node
+    
+    if !node.prev
+      @first = node.next
+      if @first
+        @first.prev = null
+    else
+      node.prev.next = node.next
+    @length--
       
 cache = {}
 postie
@@ -61,7 +56,7 @@ deliver = (name, args) ->
     lastPublished: new Date
     args: args
   cache[name].history.append args
-  fn = cache[name].subs.first()
+  fn = cache[name].subs.first
 
   while fn
     fn.data.apply this, args.args
@@ -73,7 +68,7 @@ receive = (name, fn, ignoreHistory) ->
   createCache name if ! cache[name]
   cache[name].subs.append fn
   if !ignoreHistory
-    arg = cache[name].history.first()
+    arg = cache[name].history.first
     while arg
       fn.apply this, arg.data.args
       arg.data.lastPublished = new Date
@@ -86,7 +81,7 @@ retract = (name, fn) ->
     cache[name].subs = new LinkedList
   else
     subs = cache[name].subs
-    sub = subs.first()
+    sub = subs.first
     while sub
       if sub.data == fn
         subs.remove sub
@@ -104,7 +99,7 @@ dropMessages = (name, criteria) ->
   postie.deliver 'dropMessage.' + name
   
 dropByFunction = (fn, msgs) ->
-  msg = msgs.first()
+  msg = msgs.first
   while msg
     if fn.apply msg.data
       msgs.remove msg
@@ -112,7 +107,7 @@ dropByFunction = (fn, msgs) ->
   msgs
   
 dropByDate = (date, msgs) ->
-  msg = msgs.first()
+  msg = msgs.first
   while msg
     if msg.data.created < date
       msgs.remove msg
