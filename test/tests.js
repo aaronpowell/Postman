@@ -54,9 +54,10 @@ test('can retract a callback and not receive messages', function() {
 });
 
 test('messages dropped by date', function() {
+  var d = new Date();
   postman.deliver('test9', false);
   
-  postman.dropMessages('test9', new Date());
+  postman.dropMessages('test9', new Date(d.getFullYear() + 1, d.getMonth(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds()));
   
   postman.deliver('test9', true);
   

@@ -1,3 +1,43 @@
+class LinkedList
+  constructor: () ->
+    first = null
+    last = null
+    
+    @first = () ->
+      first
+    @last = () ->
+      last
+    @length = 0
+    
+    @append = (data) ->
+      return if !data
+      
+      node = 
+        data: data
+        next: null
+        prev: null
+      
+      if !first
+        first = node
+        last = node
+      else
+        last.next = node
+        node.prev = last
+        last = node
+      
+      @length++
+
+    @remove = (node) ->
+      return if !node
+      
+      if !node.prev
+        first = node.next
+        if first
+          first.prev = null
+      else
+        node.prev.next = node.next
+      @length--
+      
 cache = {}
 postie
 isArray = (obj) ->
@@ -9,57 +49,75 @@ isDate = (obj) ->
 
 createCache = (name) ->
     cache[name] =
-      subs: []
-      history: []
+      subs: new LinkedList
+      history: new LinkedList
 
 deliver = (name, args) ->
   createCache name if ! cache[name]
   args = [] if !args
   args = [args] if !isArray args
   args = 
-    created: new Date()
-    lastPublished: new Date()
+    created: new Date
+    lastPublished: new Date
     args: args
-  cache[name].history.push args
-  fn.apply this, args.args for fn in cache[name].subs
+  cache[name].history.append args
+  fn = cache[name].subs.first()
+
+  while fn
+    fn.data.apply this, args.args
+    fn = fn.next
+
   postie
 
 receive = (name, fn, ignoreHistory) ->
   createCache name if ! cache[name]
-  cache[name].subs.push fn
+  cache[name].subs.append fn
   if !ignoreHistory
-    for arg in cache[name].history
-      fn.apply this, arg.args
-      arg.lastPublished = new Date()
-  postie
+    arg = cache[name].history.first()
+    while arg
+      fn.apply this, arg.data.args
+      arg.data.lastPublished = new Date
+      arg = arg.next
+    postie
 
 retract = (name, fn) ->
   createCache name if !cache[name]
   if !fn
-    cache[name].subs = []
+    cache[name].subs = new LinkedList
   else
     subs = cache[name].subs
-    index = subs.indexOf fn
-    if index > -1
-      subs.splice(0, index).concat subs.splice index, subs.length
+    sub = subs.first()
+    while sub
+      if sub.data == fn
+        subs.remove sub
+      sub = sub.next
   postie
-  
+
 dropMessages = (name, criteria) ->
   createCache name if ! cache[name]
   if criteria
     cache[name].history = dropByFunction criteria, cache[name].history if isFunction criteria
     cache[name].history = dropByDate criteria, cache[name].history if isDate criteria
   else
-    cache[name].history = []
+    cache[name].history = new LinkedList
 	
   postie.deliver 'dropMessage.' + name
   
 dropByFunction = (fn, msgs) ->
-  msgs.filter fn
+  msg = msgs.first()
+  while msg
+    if fn.apply msg.data
+      msgs.remove msg
+    msg = msg.next
+  msgs
   
 dropByDate = (date, msgs) ->
-    msgs.filter (x) ->
-        x.created < date
+  msg = msgs.first()
+  while msg
+    if msg.data.created < date
+      msgs.remove msg
+    msg = msg.next
+  msgs
   
 postie =
   deliver: deliver
@@ -67,4 +125,5 @@ postie =
   dropMessages: dropMessages
   retract: retract
   
+this.LinkedList = LinkedList
 this.postman = postie
