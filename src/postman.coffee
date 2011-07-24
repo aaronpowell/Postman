@@ -33,92 +33,91 @@ class LinkedList
       node.prev.next = node.next
     @length--
       
-cache = {}
-postie
-isArray = (obj) ->
-	obj.constructor == Array
-isFunction = (obj) ->
-	obj.constructor == Function
-isDate = (obj) ->
-    obj.constructor == Date
+postie      
+class Postman
+  isArray = (obj) ->
+    obj.constructor == Array
+  isFunction = (obj) ->
+    obj.constructor == Function
+  isDate = (obj) ->
+      obj.constructor == Date
+  
+  createCache = (name) ->
+      cache[name] =
+        subs: new LinkedList
+        history: new LinkedList
 
-createCache = (name) ->
-    cache[name] =
-      subs: new LinkedList
-      history: new LinkedList
-
-deliver = (name, args) ->
-  createCache name if ! cache[name]
-  args = [] if !args
-  args = [args] if !isArray args
-  args = 
-    created: new Date
-    lastPublished: new Date
-    args: args
-  cache[name].history.append args
-  fn = cache[name].subs.first
-
-  while fn
-    fn.data.apply this, args.args
-    fn = fn.next
-
-  postie
-
-receive = (name, fn, ignoreHistory) ->
-  createCache name if ! cache[name]
-  cache[name].subs.append fn
-  if !ignoreHistory
-    arg = cache[name].history.first
-    while arg
-      fn.apply this, arg.data.args
-      arg.data.lastPublished = new Date
-      arg = arg.next
+        constructor: () ->
+    cache = {}
+  
+  deliver: (name, args) ->
+    createCache name if ! cache[name]
+    args = [] if !args
+    args = [args] if !isArray args
+    args = 
+      created: new Date
+      lastPublished: new Date
+      args: args
+    cache[name].history.append args
+    fn = cache[name].subs.first
+  
+    while fn
+      fn.data.apply this, args.args
+      fn = fn.next
+  
     postie
-
-retract = (name, fn) ->
-  createCache name if !cache[name]
-  if !fn
-    cache[name].subs = new LinkedList
-  else
-    subs = cache[name].subs
-    sub = subs.first
-    while sub
-      if sub.data == fn
-        subs.remove sub
-      sub = sub.next
-  postie
-
-dropMessages = (name, criteria) ->
-  createCache name if ! cache[name]
-  if criteria
-    cache[name].history = dropByFunction criteria, cache[name].history if isFunction criteria
-    cache[name].history = dropByDate criteria, cache[name].history if isDate criteria
-  else
-    cache[name].history = new LinkedList
-	
-  postie.deliver 'dropMessage.' + name
   
-dropByFunction = (fn, msgs) ->
-  msg = msgs.first
-  while msg
-    if fn.apply msg.data
-      msgs.remove msg
-    msg = msg.next
-  msgs
+  receive: (name, fn, ignoreHistory) ->
+    createCache name if ! cache[name]
+    cache[name].subs.append fn
+    if !ignoreHistory
+      arg = cache[name].history.first
+      while arg
+        fn.apply this, arg.data.args
+        arg.data.lastPublished = new Date
+        arg = arg.next
+      postie
   
-dropByDate = (date, msgs) ->
-  msg = msgs.first
-  while msg
-    if msg.data.created < date
-      msgs.remove msg
-    msg = msg.next
-  msgs
+  retract: (name, fn) ->
+    createCache name if !cache[name]
+    if !fn
+      cache[name].subs = new LinkedList
+    else
+      subs = cache[name].subs
+      sub = subs.first
+      while sub
+        if sub.data == fn
+          subs.remove sub
+        sub = sub.next
+    postie
   
-postie =
-  deliver: deliver
-  receive: receive
-  dropMessages: dropMessages
-  retract: retract
+  dropMessages: (name, criteria) ->
+    createCache name if ! cache[name]
+    if criteria
+      cache[name].history = dropByFunction criteria, cache[name].history if isFunction criteria
+      cache[name].history = dropByDate criteria, cache[name].history if isDate criteria
+    else
+      cache[name].history = new LinkedList
+    
+    postie.deliver 'dropMessage.' + name
+    
+  dropByFunction = (fn, msgs) ->
+    msg = msgs.first
+    while msg
+      if fn.apply msg.data
+        msgs.remove msg
+      msg = msg.next
+    msgs
+    
+  dropByDate = (date, msgs) ->
+    msg = msgs.first
+    while msg
+      if msg.data.created < date
+        msgs.remove msg
+      msg = msg.next
+    msgs
+    
+postie = new Postman
   
 this.LinkedList = LinkedList
 this.postman = postie
