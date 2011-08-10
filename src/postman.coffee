@@ -118,6 +118,6 @@ class Postman
     msgs
     
 postie = new Postman
-  
+
 this.LinkedList = LinkedList
 this.postman = postie
