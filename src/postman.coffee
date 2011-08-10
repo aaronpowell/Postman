@@ -17,7 +17,7 @@ class LinkedList
       @last = node
     else
       @last.next = node
-      node.prev = last
+      node.prev = @last
       @last = node
     
     @length++
