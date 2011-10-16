@@ -1,3 +1,5 @@
+module = QUnit.module;
+
 test('messages can be delivered with no receiver', function() {
     postman.deliver('test1');
     ok(true);
@@ -64,4 +66,25 @@ test('messages dropped by date', function() {
   postman.receive('test9', function(x) {
     ok(x);
   });
+});
+
+module('async tests', {
+    setup: function() {
+      this.setTimeout = setTimeout;
+
+      setTimeout = function(fn) {
+        fn();
+      };
+    },
+    teardown: function() {
+      setTimeout = this.setTimeout;
+    }
+});
+
+test('syncronous delivers go through setTimeout', function() {
+  postman.receive('test10', function() {
+    ok(true);
+  });
+
+  postman.deliverSync('test10');
 });

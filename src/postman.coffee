@@ -67,6 +67,27 @@ class Postman
   
     postie
   
+  deliverSync: (name, args) ->
+    createCache name if ! cache[name]
+    args = [] if !args
+    args = [args] if !isArray args
+    args = 
+      created: new Date
+      lastPublished: new Date
+      args: args
+    cache[name].history.append args
+    fn = cache[name].subs.first
+  
+    while fn
+      setTimeout (
+        ((func) -> 
+          () -> func.data.apply this, args.args 
+        )(fn)
+        ), 0
+      fn = fn.next
+
+    postie
+
   receive: (name, fn, ignoreHistory) ->
     createCache name if ! cache[name]
     cache[name].subs.append fn
