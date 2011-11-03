@@ -50,8 +50,10 @@ class Postman
         constructor: () ->
     cache = {}
   
-  deliver: (name, args) ->
+  deliver: () ->
+    name = arguments[0]
     createCache name if ! cache[name]
+    args = [].slice.call arguments, 1
     args = [] if !args
     args = [args] if !isArray args
     args = 
