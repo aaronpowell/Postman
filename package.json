@@ -7,10 +7,11 @@
     "eventing",
     "message-bus"
   ],
-  "author": "Aaron Powell http://apowell.me",
-  "contributers": [
-    "Aaron Powell http://apowell.me"
-  ],
+  "maintainers": [{
+    "name": "Aaron Powell",
+    "email": "me@aaron-powell.com",
+    "web": "http://www.aaron-powell.com"
+  }],
   "licenses": [
     {
       "type": "MIT"
@@ -29,7 +30,11 @@
   "directories": {
     "lib": "./lib"
   },
-  "dependencies": {},
+  "dependencies": {
+    "coffee-script": ">=1.0.0",
+    "qunit": ">=0.2.9",
+    "uglify-js": ">=1.0.0"
+  },
   "devDependencies": {},
    "scripts": {
         "test": "./node_modules/.bin/cake tests"
