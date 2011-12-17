@@ -33,7 +33,8 @@
   "dependencies": {
     "coffee-script": ">=1.0.0",
     "qunit": ">=0.2.9",
-    "uglify-js": ">=1.0.0"
+    "uglify-js": ">=1.0.0",
+    "colors": ">=0.6.0-1"
   },
   "devDependencies": {},
    "scripts": {
