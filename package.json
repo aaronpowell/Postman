@@ -32,6 +32,6 @@
   "dependencies": {},
   "devDependencies": {},
    "scripts": {
-        "test": "cake tests"
+        "test": "./node_modules/.bin/cake tests"
    }
 }
