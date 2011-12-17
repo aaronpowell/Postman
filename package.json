@@ -1,6 +1,6 @@
 {
   "name": "postman",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "The Postman will help deliver messages around your application",
   "keywords": [
     "pub/sub",
