@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/aaronpowell/tbd.png)](https://secure.travis-ci.org/aaronpowell/postman.png)
+
 ![Postman](https://github.com/aaronpowell/Postman/raw/master/assets/Logo.png)
 
 ## What is it?

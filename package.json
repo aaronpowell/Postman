@@ -30,5 +30,8 @@
     "lib": "./lib"
   },
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {},
+   "scripts": {
+        "test": "cake tests"
+   }
 }
