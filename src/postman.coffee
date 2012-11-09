@@ -31,6 +31,14 @@ class LinkedList
         @first.prev = null
     else
       node.prev.next = node.next
+
+    if !node.next
+      @last = node.prev
+      if @last
+        @last.next = null
+    else
+      node.next.prev = node.prev
+
     @length--
       
 postie      
